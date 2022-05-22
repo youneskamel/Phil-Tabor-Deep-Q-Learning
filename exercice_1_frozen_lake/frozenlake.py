@@ -1,12 +1,23 @@
 import gym
-import time
+import numpy as np
+import matplotlib.pyplot as plt
 
 env = gym.make('FrozenLake-v0')
-env.render()
+scores = []
+win_pct = []
 for i in range(0,1000):
      env.reset()
-     for i in range (0,10):
+     done = 0
+     score = 0
+     while not done:
         action = env.action_space.sample()
-        env.step(action)
+        obs, reward, done, info = env.step(action)
+        score += reward
      env.render()
-     time.sleep(0.5)
+     scores.append(score)
+
+     if i % 10 == 0 :
+         average = np.mean(scores[-10:])
+         win_pct.append(average)
+plt.plot(win_pct)
+plt.show()
