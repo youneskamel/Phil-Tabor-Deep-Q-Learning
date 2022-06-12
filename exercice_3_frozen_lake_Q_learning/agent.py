@@ -21,8 +21,16 @@ class Agent :
     # Update function for Q.
     # Arguments : Reward is the reward received from the chosen action
     # s_prime is the new state after the action 
-    def update_Q(self, reward, s_prime):
-        current_q = self.Q[self.s][self.a]
+    def update_Q(self, reward, s_prime, action):
+        current_q = self.Q[self.s][action]
         # Choose the highest reward actiona knowing we're in s_prime
-        max_next_q = max(self.Q[s_prime], key= lambda a: self.Q[s_prime][a])
-        current_q += reward + self.gamma*(max_next_q - current_q)
+        max_next_q = max(self.Q[s_prime], key=lambda a: self.Q[s_prime][a])
+        current_q += self.alpha*(reward + self.gamma*(max_next_q - current_q))
+
+
+    # Function used by the agent to choose next action
+    def action(self) :
+        eps = self.epsilon_min
+        optimal_action = max(self.Q[self.s], key=lambda a : self.Q[self.s][a])
+        action = eps*optimal_action
+        return action
