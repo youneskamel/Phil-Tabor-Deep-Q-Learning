@@ -36,5 +36,5 @@ class Agent :
         optimal_action = max(self.Q[self.s], key=lambda a : self.Q[self.s][a])
         random_action = random.randint(0, 3)
         sampleList = [optimal_action, random_action]
-        action = = random.choices(sampleList, weights=(eps,eps-1), k=2)
+        action = random.choices(sampleList, weights=(eps,eps-1), k=2)
         return action
