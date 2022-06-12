@@ -1,3 +1,5 @@
+import random
+
 class Agent :
     # Initialization function of the agent class.
     def __init__(self) :
@@ -32,5 +34,7 @@ class Agent :
     def action(self) :
         eps = self.epsilon_min
         optimal_action = max(self.Q[self.s], key=lambda a : self.Q[self.s][a])
-        action = eps*optimal_action
+        random_action = random.randint(0, 3)
+        sampleList = [optimal_action, random_action]
+        action = = random.choices(sampleList, weights=(eps,eps-1), k=2)
         return action
