@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from agent import Agent
 
-agent  = Agent
 env = gym.make('FrozenLake-v0')
 scores = []
 win_pct = []
@@ -12,6 +11,7 @@ for i in range(0,1000):
      done = 0
      score = 0
      while not done:
+        agent  = Agent()
         action = agent.action()
         obs, reward, done, info = env.step(action)
         agent.update_Q(reward, obs, action)

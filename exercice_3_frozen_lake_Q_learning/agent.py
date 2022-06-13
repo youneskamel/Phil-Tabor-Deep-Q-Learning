@@ -19,6 +19,7 @@ class Agent :
         # exploit-explore ratio
         self.epsilon_max = 1
         self.epsilon_min = 0.01
+        self.epsilon = self.epsilon_max
 
     # Update function for Q.
     # Arguments : Reward is the reward received from the chosen action
@@ -28,13 +29,18 @@ class Agent :
         # Choose the highest reward actiona knowing we're in s_prime
         max_next_q = max(self.Q[s_prime], key=lambda a: self.Q[s_prime][a])
         current_q += self.alpha*(reward + self.gamma*(max_next_q - current_q))
+        self.s = s_prime
 
 
     # Function used by the agent to choose next action
     def action(self) :
-        eps = self.epsilon_min
-        optimal_action = max(self.Q[self.s], key=lambda a : self.Q[self.s][a])
+        eps = self.epsilon
+        optimal_action = max(self.Q[self.s], key=self.Q[self.s].get)
         random_action = random.randint(0, 3)
         sampleList = [optimal_action, random_action]
-        action = random.choices(sampleList, weights=(eps,eps-1), k=2)
+        action = random.choices(sampleList, weights=(1-eps,eps), k=2)
+        action = action[0]
+        if self.epsilon > self.epsilon_min :
+            self.epsilon -= 0.01
+        print(action)
         return action
