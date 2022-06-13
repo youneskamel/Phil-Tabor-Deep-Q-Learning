@@ -3,17 +3,13 @@ import random
 class Agent :
     # Initialization function of the agent class.
     def __init__(self) :
-
         # Values of the dictionary are the states s, values of the sub-dictionaries are the actions a
-        self.Q = {0: {0:0, 1:0, 2:0, 3:0} ,1: {0:0, 1:0, 2:0, 3:0} ,2: {0:0, 1:0, 2:0, 3:0}, 
-        3: {0:0, 1:0, 2:0, 3:0},4: {0:0, 1:0, 2:0, 3:0}, 5: {0:0, 1:0, 2:0, 3:0}, 6: {0:0, 1:0, 2:0, 3:0},
-        7:{0:0, 1:0, 2:0, 3:0}, 8:{0:0, 1:0, 2:0, 3:0}, 9:{0:0, 1:0, 2:0, 3:0},10:{0:0, 1:0, 2:0, 3:0}, 11:{0:0, 1:0, 2:0, 3:0},
-        12:{0:0, 1:0, 2:0, 3:0}, 13:{0:0, 1:0, 2:0, 3:0}, 14:{0:0, 1:0, 2:0, 3:0}, 15:{0:0, 1:0, 2:0, 3:0}}
-
+        self.Q = {} 
+        for action in range(15):
+            self.Q[action] = {0:0, 1:0, 2:0, 3:0}
         # current state
         self.s = 0        
         # learning rate
-        #pas le probleme
         self.alpha = 0.001
         # discount rate
         self.gamma = 0.9
