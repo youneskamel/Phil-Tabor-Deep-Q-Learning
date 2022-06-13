@@ -27,8 +27,10 @@ class Agent :
     def update_Q(self, reward, s_prime, action):
         current_q = self.Q[self.s][action]
         # Choose the highest reward actiona knowing we're in s_prime
-        max_next_q = max(self.Q[s_prime], key=lambda a: self.Q[s_prime][a])
-        current_q += self.alpha*(reward + self.gamma*(max_next_q - current_q))
+        max_next_q = max(self.Q[s_prime].values())
+        self.Q[self.s][action] = current_q + self.alpha*(reward + self.gamma*(max_next_q - current_q))
+
+    def update_state(self, s_prime):
         self.s = s_prime
 
 
@@ -41,6 +43,5 @@ class Agent :
         action = random.choices(sampleList, weights=(1-eps,eps), k=2)
         action = action[0]
         if self.epsilon > self.epsilon_min :
-            self.epsilon -= 0.01
-        print(action)
+            self.epsilon -= 0.00001
         return action

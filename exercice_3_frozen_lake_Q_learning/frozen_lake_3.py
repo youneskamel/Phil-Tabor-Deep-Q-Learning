@@ -6,7 +6,7 @@ from agent import Agent
 env = gym.make('FrozenLake-v0')
 scores = []
 win_pct = []
-for i in range(0,1000):
+for i in range(0,500000):
      obs = env.reset()
      done = 0
      score = 0
@@ -15,6 +15,7 @@ for i in range(0,1000):
         action = agent.action()
         obs, reward, done, info = env.step(action)
         agent.update_Q(reward, obs, action)
+        agent.update_state(obs)
         score += reward
      print("Game done")
      env.render()
