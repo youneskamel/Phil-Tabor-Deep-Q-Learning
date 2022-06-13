@@ -46,5 +46,5 @@ class Agent :
         action = random.choices(sampleList, weights=(1-eps,eps), k=2)
         action = action[0]
         if self.epsilon_max > self.epsilon_min :
-            self.epsilon_max -= 1/2000000
+            self.epsilon_max -= 1/4600000
         return action
