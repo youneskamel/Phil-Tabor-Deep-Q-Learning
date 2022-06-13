@@ -6,12 +6,12 @@ from agent import Agent
 env = gym.make('FrozenLake-v0')
 scores = []
 win_pct = []
+agent  = Agent()
 for i in range(0,500000):
      obs = env.reset()
      done = 0
      score = 0
      while not done:
-        agent  = Agent()
         action = agent.action()
         obs, reward, done, info = env.step(action)
         agent.update_Q(reward, obs, action)
