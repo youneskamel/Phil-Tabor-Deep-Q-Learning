@@ -5,7 +5,7 @@ class Agent :
     def __init__(self) :
         # Values of the dictionary are the states s, values of the sub-dictionaries are the actions a
         self.Q = {} 
-        for action in range(15):
+        for action in range(16):
             self.Q[action] = {0:0, 1:0, 2:0, 3:0}
         # current state
         self.s = 0        
@@ -24,7 +24,7 @@ class Agent :
         current_q = self.Q[self.s][action]
         # Choose the highest reward action knowing we're in s_prime
         max_next_q = max(self.Q[s_prime].values())
-        self.Q[self.s][action] = current_q + self.alpha*(reward + self.gamma*(max_next_q - current_q))
+        self.Q[self.s][action] = current_q + self.alpha*(reward + self.gamma*max_next_q - current_q)
 
     # Function used to update the state in the agent class
     def update_state(self, s_prime):
