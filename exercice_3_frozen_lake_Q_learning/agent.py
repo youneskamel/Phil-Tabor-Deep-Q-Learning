@@ -1,4 +1,6 @@
 import random
+import numpy as np
+
 
 class Agent :
     # Initialization function of the agent class.
@@ -14,7 +16,7 @@ class Agent :
         # discount rate
         self.gamma = 0.9
         # exploit-explore ratio
-        self.epsilon_max = 1
+        self.epsilon = 1
         self.epsilon_min = 0.01
 
     # Update function for Q.
@@ -32,13 +34,13 @@ class Agent :
 
     # Function used by the agent to choose next action
     def action(self) :
-        eps = self.epsilon_max
-        # define an optimalaction and a random action
+        eps = self.epsilon
+        # define an optimal action and a random action
         optimal_action = max(self.Q[self.s], key=self.Q[self.s].get)
         random_action = random.randint(0, 3)
         # choose between the optimal and random actions, weighed by epsilon
         possible_actions = [optimal_action, random_action]
         action = random.choices(possible_actions, weights=(1-eps,eps), k=2)[0]
-        if self.epsilon_max > self.epsilon_min :
-            self.epsilon_max -= 1/4600000
+        if self.epsilon > self.epsilon_min :
+            self.epsilon = self.epsilon*0.9999995
         return action
