@@ -22,7 +22,7 @@ class Agent :
     # Update function for Q.
     # Arguments : Reward is the reward received from the chosen action
     # s_prime is the new state after the action 
-    #probleme icic ?
+    #problem here ?
     def update_Q(self, reward, s_prime, action):
         current_q = self.Q[self.s][action]
         # Choose the highest reward action knowing we're in s_prime
