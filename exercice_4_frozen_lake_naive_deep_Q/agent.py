@@ -1,4 +1,4 @@
-import neural_net from NeuralNet
+from neural_net import NeuralNet
 class Agent():
     def __init__(self, lr, gamma, n_actions, n_states, eps_start, eps_end, eps_dec):
         self.lr = lr
@@ -8,23 +8,25 @@ class Agent():
         self.epsilon = eps_start
         self.eps_min = eps_end
         self.eps_dec = eps_dec
+        self.neural_net = NeuralNet()
 
     
-    def choose_action(self, data):
-        optimal_action = neural_net.forward(data)
+    def choose_action(self, reward, obs, action):
+        data = [reward, obs, action]
+        optimal_action = self.neural_net.forward(data)
         random_action = np.random.choice(3,1)[0]
-        action = 0
+        next_action = 0
         if np.random.random() < self.epsilon:
-            action = random_action
+            next_action = random_action
         else:
-            action = optimal_action
+            next_action = optimal_action
         if self.epsilon > self.epsilon_min :
             self.epsilon = self.epsilon*0.9999995
-        return action
+        return next_action
          
     
-    def learn(self, data):
-        neural_net.learn(data, labels)
+    def learn(self, reward, obs, action):
+        self.neural_net.learn(data, labels)
     
     
     def decrease_epsilon(self):

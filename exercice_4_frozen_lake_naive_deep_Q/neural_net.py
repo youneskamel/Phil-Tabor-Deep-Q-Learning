@@ -5,7 +5,7 @@ import torch as T
 
 class NeuralNet(nn.Module):
     def __init__(self, lr, n_classes, input_dims):
-        super(LinearClassifier, self).__init__()
+        super(NeuralNet, self).__init__()
 
         self.fc1 = nn.Linear(*input_dims, 128)
         self.fc2 = nn.Linear(128, 256)
@@ -17,7 +17,7 @@ class NeuralNet(nn.Module):
         self.device = T.device('cuda:0' if T.cuda.is_available() else 'cpu')
         self.to(self.device)
 
-		#forward propagation
+	#forward propagation
     def forward(self, data):
         layer1 = F.sigmoid(self.fc1(data))
         layer2 = F.sigmoid(self.fc2(layer1))

@@ -12,10 +12,10 @@ for i in range(0,500000):
      done = 0
      score = 0
      while not done:
-        action = agent.action()
+        action = agent.choose_action(reward, obs, action)
         obs, reward, done, info = env.step(action)
-        agent.update_Q(reward, obs, action)
-        agent.update_state(obs)
+        agent.learn(reward, obs, action)
+        agent.decrease_epsilon()
         score += reward
      print("Game done")
      env.render()
