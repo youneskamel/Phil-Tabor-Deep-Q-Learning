@@ -22,6 +22,7 @@ class Agent :
     # Update function for Q.
     # Arguments : Reward is the reward received from the chosen action
     # s_prime is the new state after the action 
+    #probleme icic ?
     def update_Q(self, reward, s_prime, action):
         current_q = self.Q[self.s][action]
         # Choose the highest reward action knowing we're in s_prime
@@ -34,13 +35,15 @@ class Agent :
 
     # Function used by the agent to choose next action
     def action(self) :
-        eps = self.epsilon
         # define an optimal action and a random action
         optimal_action = max(self.Q[self.s], key=self.Q[self.s].get)
-        random_action = random.randint(0, 3)
+        random_action = np.random.choice(3,1)[0]
         # choose between the optimal and random actions, weighed by epsilon
-        possible_actions = [optimal_action, random_action]
-        action = random.choices(possible_actions, weights=(1-eps,eps), k=2)[0]
+        action = 0
+        if np.random.random() < self.epsilon:
+            action = random_action
+        else:
+            action = optimal_action
         if self.epsilon > self.epsilon_min :
             self.epsilon = self.epsilon*0.9999995
         return action
