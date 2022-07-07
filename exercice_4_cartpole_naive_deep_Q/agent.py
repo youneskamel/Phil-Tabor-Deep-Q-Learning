@@ -24,15 +24,17 @@ class Agent():
         optimal_action = T.argmax(self.q_network.forward(state)).item()
         random_action = np.random.choice(self.action_space)
         if np.random.random() > self.epsilon:
-            next_action = random_action
-        else:
             next_action = optimal_action
+        else:
+            next_action = random_action
         return next_action
     
     # Decrease epsilon to make the algorithm more greedy
-    def decrease_epsilon(self):            
-        self.epsilon = self.epsilon - self.eps_dec \
-                            if self.epsilon > self.eps_min else self.eps_min
+    def decrease_epsilon(self):  
+        if self.epsilon > self.eps_min :          
+            self.epsilon = self.epsilon - self.eps_dec
+        else : 
+            self.epsilon =  self.eps_min
 
     def learn(self, reward, state, next_state, action):
         # Reset the gradients because we will compute them again with backward()
