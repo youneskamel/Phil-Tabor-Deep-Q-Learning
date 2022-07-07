@@ -30,9 +30,9 @@ class Agent():
         return next_action
     
     # Decrease epsilon to make the algorithm more greedy
-    def decrease_epsilon(self):
-        if self.epsilon > self.eps_min :
-            self.epsilon = self.epsilon-self.eps_dec
+    def decrease_epsilon(self):            
+        self.epsilon = self.epsilon - self.eps_dec \
+                            if self.epsilon > self.eps_min else self.eps_min
 
     def learn(self, reward, state, next_state, action):
         # Reset the gradients because we will compute them again with backward()
@@ -54,7 +54,7 @@ class Agent():
         # I think it's because we are not incrementing Q but updating the weights of the network to predict it
         # The Bellman equation q <- q + alpha*(reward + gamma*q_next -q) is an iterative incrementation equation
         # Here we don't want to increment q but to precit it's maximum value which is teh reward + the max value of q_next 
-        q_bootstrap = reward + self.gamma*q_next - q_pred
+        q_bootstrap = reward + self.gamma*q_next
 
         loss = self.q_network.loss(q_bootstrap, q_pred).to(self.q_network.device)
         loss.backward()
