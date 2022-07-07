@@ -7,7 +7,7 @@ env = gym.make('FrozenLake-v0')
 scores = []
 win_pct = []
 agent  = Agent()
-for i in range(0,500000):
+for i in range(0,10000):
      obs = env.reset()
      done = 0
      score = 0
