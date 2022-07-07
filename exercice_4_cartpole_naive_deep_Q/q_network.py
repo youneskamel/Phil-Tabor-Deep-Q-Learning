@@ -23,7 +23,7 @@ class Qnetwork(nn.Module):
 
 	# forward propagation
     def forward(self, state):
-        layer1 = F.relu(self.fc1(state))
+        layer1 = F.relu(self.fc1(state.float()))
         layer2 = self.fc2(layer1)
 
         return layer2

@@ -13,6 +13,8 @@ class Agent():
         self.eps_min = eps_min
         self.eps_dec = eps_dec
         self.input_dims = input_dims
+        self.action_space = [i for i in range(self.n_actions)]
+
         self.q_network = Qnetwork(self.lr, self.n_actions, self.input_dims)
 
     # Function that the agent uses to choose the next action
@@ -20,7 +22,7 @@ class Agent():
     def choose_action(self, state):
         state = T.tensor(state, dtype=T.float).to(self.q_network.device)
         optimal_action = T.argmax(self.q_network.forward(state)).item()
-        random_action = np.random.choice(3,1)[0]
+        random_action = np.random.choice(self.action_space)
         #next_action = 0
         if np.random.random() < self.epsilon:
             next_action = random_action
@@ -56,7 +58,7 @@ class Agent():
         q_bootstrap = reward + self.gamma*q_next - q_pred
 
 
-        loss = self.q_network.loss(q_bootstrap, q_pred).to(self.Q.device)
+        loss = self.q_network.loss(q_bootstrap, q_pred).to(self.q_network.device)
         loss.backward()
         self.q_network.optimizer.step()
         self.decrease_epsilon()
