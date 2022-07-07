@@ -1,6 +1,8 @@
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import torch as T
+
 
 # The neural network that replaces our Q-value table
 # It takes the state as input data and output the state-action value (Q)

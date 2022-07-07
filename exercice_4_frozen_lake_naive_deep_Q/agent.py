@@ -1,14 +1,14 @@
 from q_network import Qnetwork
+import numpy as np
 import torch as T
 
 # This is the class we will import in the environement to let it learn
 #Arguments : 
 class Agent():
-    def __init__(self, lr, n_actions, n_states, input_dims, gamma=0.99, epsilon=1, eps_min=0.01, eps_dec=0.005):
+    def __init__(self, lr, n_actions, input_dims, gamma=0.99, epsilon=1, eps_min=0.01, eps_dec=0.005):
         self.lr = lr
         self.gamma = gamma
         self.n_actions = n_actions
-        self.n_states = n_states
         self.epsilon = epsilon
         self.eps_min = eps_min
         self.eps_dec = eps_dec
@@ -21,7 +21,7 @@ class Agent():
         state = T.tensor(state, dtype=T.float).to(self.q_network.device)
         optimal_action = T.argmax(self.q_network.forward(state)).item()
         random_action = np.random.choice(3,1)[0]
-        next_action = 0
+        #next_action = 0
         if np.random.random() < self.epsilon:
             next_action = random_action
         else:
