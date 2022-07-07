@@ -17,7 +17,7 @@ for i in range(0,500000):
         agent.update_Q(reward, obs, action)
         agent.update_state(obs)
         score += reward
-     print("epsiode :", i)
+     print("episode :", i)
      print("epsilon:", agent.epsilon)
      scores.append(score)
 
