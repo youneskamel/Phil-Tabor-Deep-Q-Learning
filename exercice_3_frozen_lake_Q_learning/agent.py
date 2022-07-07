@@ -37,7 +37,7 @@ class Agent :
     def action(self) :
         # define an optimal action and a random action
         optimal_action = max(self.Q[self.s], key=self.Q[self.s].get)
-        random_action = np.random.choice(3,1)[0]
+        random_action = np.random.choice([i for i in range(4)])
         # choose between the optimal and random actions, weighed by epsilon
         action = 0
         if np.random.random() < self.epsilon:
