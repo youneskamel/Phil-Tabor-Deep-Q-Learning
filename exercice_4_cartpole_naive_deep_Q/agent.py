@@ -23,7 +23,7 @@ class Agent():
         state = T.tensor(state, dtype=T.float).to(self.q_network.device)
         optimal_action = T.argmax(self.q_network.forward(state)).item()
         random_action = np.random.choice(self.action_space)
-        if np.random.random() < self.epsilon:
+        if np.random.random() > self.epsilon:
             next_action = random_action
         else:
             next_action = optimal_action
