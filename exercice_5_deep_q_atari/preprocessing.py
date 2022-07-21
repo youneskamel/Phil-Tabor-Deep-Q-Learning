@@ -12,7 +12,7 @@ class FrameSkippingAndFlickering(gym.Wrapper):
             n_fram_skip() : frames to skip (repeat action for the given value of frames)
     '''
     def __init__(self, env=None, n_frame_skip=4):
-        super().__init__()
+        super().__init__(env)
         self.env = env
         self.n_frame_skip = n_frame_skip
         self.frame_buffer = []
@@ -63,7 +63,7 @@ class GreyscaleAndReshape(gym.ObservationWrapper):
         super().__init__(env)
         # Atari has color channels at the end, pytorch needs them at the beginning
         # so we give self.shape the dimmesions of the shape argument but with color channels first
-        self.shape = tuple(shape[2], shape[0], shape[1])
+        self.shape = (shape[2], shape[0], shape[1])
         # We use gym.spaces.Box to reshape the obs space
         # self.observation_space is inherited from gym.ObservationWrapper
         self.observation_space = Box(low=0, high=1.0, shape=self.shape,dtype=np.float32)
@@ -78,7 +78,7 @@ class GreyscaleAndReshape(gym.ObservationWrapper):
         obs = cv2.cvtColor(obs, cv2.COLOR_RGB2GRAY)
         # Reminder : Python slice notation : x[start_index, end_index, step_size]
         obs = cv2.resize(obs, self.shape[1:], interpolation=cv2.INTER_AREA)
-        obs = np.array(obs, dtype=np.unit8).reshape(self.shape) / 255
+        obs = np.array(obs, dtype=np.uint8).reshape(self.shape) / 255
         return obs
      
 class StackFrames(gym.ObservationWrapper):
