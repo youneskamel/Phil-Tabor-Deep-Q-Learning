@@ -81,8 +81,10 @@ class PreprocessFrame(gym.ObservationWrapper):
         obs = np.array(obs, dtype=np.unit8).reshape(self.shape) / 255
         return obs
      
-''''''
 class StackFrames(gym.ObservationWrapper):
+    '''
+
+    '''
     def __init__(self, env, n_frame_skip):
 
 
