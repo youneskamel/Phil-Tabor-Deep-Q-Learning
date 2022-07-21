@@ -3,7 +3,7 @@ import numpy as np
 import gym
 from gym.spaces import Box
 
-class RepeatActionAndMaxFrame(gym.Wrapper):
+class FrameSkippingAndFlickering(gym.Wrapper):
     '''
     Initializer for an OpenAI wrapper used to repeat actions for several frames and
     deal with flickering in the Atari games. This technique is documented in the Atari RL litterature
@@ -51,7 +51,7 @@ class RepeatActionAndMaxFrame(gym.Wrapper):
         self.frame_buffer.append(obs)
         return obs
 
-class PreprocessFrame(gym.ObservationWrapper):
+class GreyscaleAndReshape(gym.ObservationWrapper):
 
     '''
     Intiliazer function for the frame preprocessing class
@@ -86,14 +86,34 @@ class StackFrames(gym.ObservationWrapper):
 
     '''
     def __init__(self, env, n_frame_skip):
+        super().__init__(env)
+        self.frame_stack = []
+        self.n_frame_skip = n_frame_skip
+        self.observation_space =  gym.spaces.Box(env.observation_space.low.repeat(n_frame_skip, axis=0),\
+                            env.observation_space.high.repeat(n_frame_skip, axis=0), dtype=np.float32)
 
 
     def reset(self):
-     
+        self.frame_stack = []
+        obs = self.env.reset()
+        for i in range(self.n_frame_skip) :
+            self.frame_stack.append(obs)
+        np_stack = np.array(self.frame_stack)
+        np_stack = np_stack.reshape(self.observation_space.low.shape)
+        return np_stack     
 
-    def observation(self, observation):
-    
+    def observation(self, obs):
+        self.frame_stack.append(obs)
+        np_stack = np.array(self.frame_stack)
+        np_stack = np_stack.reshape(self.observation_space.low.shape)
+        return np_stack
 
-def make_env(env_name, shape=(84,84,1), n_frame_skip=4, clip_rewards=False,
-             no_ops=0, fire_first=False):
+
+def build_env(env_name, shape=(84,84,1), n_frame_skip=4):
+    env = gym.make(env_name)
+    env = FrameSkippingAndFlickering(env, n_frame_skip)
+    env = GreyscaleAndReshape(shape, env)
+    env = StackFrames(env, n_frame_skip)
+
+    return env
  
