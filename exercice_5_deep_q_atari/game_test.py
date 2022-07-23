@@ -1,4 +1,3 @@
-import gym
 import numpy as np
 import matplotlib.pyplot as plt
 from preprocessing import build_env

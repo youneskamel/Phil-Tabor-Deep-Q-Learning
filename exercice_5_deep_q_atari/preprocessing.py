@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import gym
 from gym.spaces import Box
+import collections
 
 class FrameSkippingAndFlickering(gym.Wrapper):
     '''
@@ -15,7 +16,8 @@ class FrameSkippingAndFlickering(gym.Wrapper):
         super().__init__(env)
         self.env = env
         self.n_frame_skip = n_frame_skip
-        self.frame_buffer = []
+        self.shape = env.observation_space.low.shape
+        self.frame_buffer = np.zeros_like((2, self.shape))
       
     ''' 
     Wraper for env.step() functiion
@@ -31,14 +33,13 @@ class FrameSkippingAndFlickering(gym.Wrapper):
             obs, reward, done, info = self.env.step(action)
             total_rewards += reward
             # on retourne le frame max entre les deux dernier
-            # osef des deux premiers, les elements cligonetent toutes les 
+            # osef des deux premiers, les elements clignotent toutes les 
             # 2 frames et on veut juste empecher ca
-            idx = i % 2
-            self.frame_buffer[idx] = obs
+            self.frame_buffer[i%2] = obs
             if done :
                 break
 
-        max_frame = np.max(self.frame_buffer)
+        max_frame = np.maximum(self.frame_buffer[0], self.frame_buffer[1])
         return max_frame, total_rewards, done, info
     ''' 
     Wraper for env.reset() functiion
@@ -47,8 +48,8 @@ class FrameSkippingAndFlickering(gym.Wrapper):
     '''
     def reset(self):
         obs = self.env.reset()
-        self.frame_buffer = []
-        self.frame_buffer.append(obs)
+        self.frame_buffer = np.zeros_like((2, self.shape))
+        self.frame_buffer[0] = obs
         return obs
 
 class GreyscaleAndReshape(gym.ObservationWrapper):
@@ -87,14 +88,14 @@ class StackFrames(gym.ObservationWrapper):
     '''
     def __init__(self, env, n_frame_skip):
         super().__init__(env)
-        self.frame_stack = []
+        self.frame_stack = collections.deque(maxlen=n_frame_skip)
         self.n_frame_skip = n_frame_skip
         self.observation_space =  gym.spaces.Box(env.observation_space.low.repeat(n_frame_skip, axis=0),\
                             env.observation_space.high.repeat(n_frame_skip, axis=0), dtype=np.float32)
 
 
     def reset(self):
-        self.frame_stack = []
+        self.frame_stack = collections.deque(maxlen=self.n_frame_skip)
         obs = self.env.reset()
         for i in range(self.n_frame_skip) :
             self.frame_stack.append(obs)
@@ -110,7 +111,7 @@ class StackFrames(gym.ObservationWrapper):
 
 
 def build_env(env_name, shape=(84,84,1), n_frame_skip=4):
-    env = gym.make(env_name)
+    env = gym.make(env_name, render_mode='rgb_array')
     env = FrameSkippingAndFlickering(env, n_frame_skip)
     env = GreyscaleAndReshape(shape, env)
     env = StackFrames(env, n_frame_skip)
